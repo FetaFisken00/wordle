@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.testClass {
+  height: 50px;
+  width: 50px;
+  margin: 1px;
+  background-color: red;
+}
+
+.WordleGrid{
+  display: grid;
+  grid-template-columns: 51px 51px 51px 51px 51px;
+}
