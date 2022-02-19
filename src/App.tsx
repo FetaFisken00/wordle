@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Wordle from "./Wordle";
 import Keyboard from "./Keyboard";
 import { v4 as uuid } from "uuid";
@@ -9,6 +9,41 @@ import word_key from "./valid_words.json";
 
 const LETTER_COUNT: number = 30;
 const WORD_LENGTH: number = 5;
+
+const keyWhitelistLookup: string[] = [
+    "q",
+    "w",
+    "e",
+    "r",
+    "t",
+    "y",
+    "u",
+    "i",
+    "o",
+    "p",
+    "å",
+    "a",
+    "s",
+    "d",
+    "f",
+    "g",
+    "h",
+    "j",
+    "k",
+    "l",
+    "ö",
+    "ä",
+    "z",
+    "x",
+    "c",
+    "v",
+    "b",
+    "n",
+    "m",
+    "enter",
+    "space",
+    "backspace",
+];
 
 let expectedWord = answers[Math.floor(Math.random() * answers.length)];
 console.log(expectedWord);
@@ -172,6 +207,10 @@ function App(): JSX.Element {
     ]);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        document.addEventListener('keydown', FUNC_001)
+    }, [])
+
     if (tileList.length === 0) {
         let newTileList: any[] = [];
 
@@ -194,40 +233,6 @@ function App(): JSX.Element {
      * @returns void
      */
     function sanitizeInput(keyPress: any): void {
-        const keyWhitelistLookup: string[] = [
-            "q",
-            "w",
-            "e",
-            "r",
-            "t",
-            "y",
-            "u",
-            "i",
-            "o",
-            "p",
-            "å",
-            "a",
-            "s",
-            "d",
-            "f",
-            "g",
-            "h",
-            "j",
-            "k",
-            "l",
-            "ö",
-            "ä",
-            "z",
-            "x",
-            "c",
-            "v",
-            "b",
-            "n",
-            "m",
-            "enter",
-            "space",
-            "backspace",
-        ];
         // Checks if there is a key modifier applied, for ctrl-backspace
         if (keyPress.ctrlKey || keyPress.altKey) {
             console.log("ctrl/alt");
@@ -264,35 +269,37 @@ function App(): JSX.Element {
     }
 
     function setKeyboardStateCorrect(userInputLetter: string) {
-        for (const [k, v] of Object.entries(keyList[0])) {
-            if (v.letter === userInputLetter) {
+        const newKeyList = [...keyList]
+        for (const [k, v] of Object.entries(newKeyList[0])) {
+            if (v.letter.toLocaleLowerCase() === userInputLetter) {
                 v.class = "key correct";
                 console.log(v.letter, k);
             }
         }
+        setKeyList(newKeyList)
     }
 
     function setKeyboardStateWrong(userInputLetter: string) {
-        for (const [k, v] of Object.entries(keyList[0])) {
-            if (v.letter === userInputLetter) {
+        const newKeyList = [...keyList]
+        for (const [k, v] of Object.entries(newKeyList[0])) {
+            if (v.letter.toLocaleLowerCase() === userInputLetter) {
                 v.class = "key wrong";
                 console.log(v.letter, k);
             }
         }
+        setKeyList(newKeyList)
     }
 
     function setKeyboardStateWrongLocation(userInputLetter: string) {
-        for (const [k, v] of Object.entries(keyList[0])) {
-            if (v.letter === userInputLetter) {
+        const newKeyList = [...keyList]
+        for (const [k, v] of Object.entries(newKeyList[0])) {
+            if (v.letter.toLocaleLowerCase() === userInputLetter) {
                 v.class = "key wrong-location";
                 console.log(v.letter, k);
             }
         }
+        setKeyList(newKeyList)
     }
-
-    // function handleButtonPress(e: any) {
-    //     console.log(e)
-    // }
 
     /**
      * TODO: Fix edge cases, also get do bug testing :)
@@ -337,20 +344,20 @@ function App(): JSX.Element {
      */
     function handleInput(event?: any): void {
         if (event.target.dataset.enter) {
-            console.log("enter work here");
+            console.log("KEY:ENTER");
             handleAnswer()
             return
         }
 
         if (event.target.dataset.delete) {
             const tempInputRef = (inputRef.current as HTMLInputElement).value;
-            console.log("delte a char here",0,tempInputRef.length - 1);
+            console.log("KEY:DELETE");
             (inputRef.current as HTMLInputElement).value = tempInputRef.slice(0, tempInputRef.length - 1)
         }
 
         if (event.target.dataset.key && (inputRef.current as HTMLInputElement).value.length < 5) {
-            (inputRef.current as HTMLInputElement).value += event.target.dataset.key;
-            console.log(">>>>>", event.target.dataset.key);
+            (inputRef.current as HTMLInputElement).value += event.target.dataset.key.toLowerCase();
+            console.log("ADDING:", event.target.dataset.key);
         }
 
         const input = (inputRef.current as HTMLInputElement).value;

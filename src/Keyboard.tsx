@@ -24,7 +24,7 @@ export default function Keyboard({keyList, handleButtonPress}: any) {
         <button  onClick={handleButtonPress} className={keyList[0].letter_k.class} data-key="K">K</button>
         <button  onClick={handleButtonPress} className={keyList[0].letter_l.class} data-key="L">L</button>
         <div  className="space"></div>
-        <button onClick={handleButtonPress} data-enter className="key large">Enter</button>
+        <button onClick={handleButtonPress} data-delete className="key large">*SVG*</button>
         <button onClick={handleButtonPress} className={keyList[0].letter_z.class} data-key="Z">Z</button>
         <button onClick={handleButtonPress} className={keyList[0].letter_x.class} data-key="X">X</button>
         <button onClick={handleButtonPress} className={keyList[0].letter_c.class} data-key="C">C</button>
@@ -32,7 +32,7 @@ export default function Keyboard({keyList, handleButtonPress}: any) {
         <button onClick={handleButtonPress} className={keyList[0].letter_b.class} data-key="B">B</button>
         <button onClick={handleButtonPress} className={keyList[0].letter_n.class} data-key="N">N</button>
         <button onClick={handleButtonPress} className={keyList[0].letter_m.class} data-key="M">M</button>
-        <button onClick={handleButtonPress} data-delete className="key large">*SVG*</button>
+        <button onClick={handleButtonPress} data-enter className="key large">Enter</button>
     </div>
   )
 }
